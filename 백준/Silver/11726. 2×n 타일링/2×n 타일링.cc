@@ -1,30 +1,25 @@
-/*
-D[i] = 2 x i 의 타일을 채우는 방법의 수
-
-*/
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
+const int MOD = 10007;
 int n;
-int dp[1004];
+vector<int> memo;
 
-int main() {
-
-	cin >> n;
-
-	// dp[n] = dp[n - 1] + dp[n - 2];
-	dp[1] = 1;
-	dp[2] = 2;
-	
-	for (int can = 3; can <= n; can++) {
-		dp[can] = dp[can - 1] + dp[can - 2];
-		dp[can] %= 10007;
-	}
-
-	cout << dp[n];
-
-	return 0;
+int solve(int x) {
+    if (x == 1) return 1;
+    if (x == 2) return 2;
+    int& ret = memo[x];
+    if (ret != -1) return ret;
+    ret = (solve(x - 1) + solve(x - 2)) % MOD;
+    return ret;
 }
 
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-// 2^20 마지노선임 << 재귀 
+    if (!(cin >> n)) return 0;
+    memo.assign(max(3, n + 1), -1); // n이 1이나 2여도 안전하게 확보
+    cout << solve(n) % MOD << "\n";
+    return 0;
+}
